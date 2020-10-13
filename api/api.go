@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tt/model"
+	"github.com/hooneun/golang_anyting/model"
 )
 
 func Time(c *gin.Context) {
