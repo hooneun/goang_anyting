@@ -4,6 +4,7 @@ import (
 	"log"
 	"testing"
 
+	"github.com/hooneun/golang_anyting/helper"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -11,10 +12,11 @@ import (
 var createUserID int64
 
 func TestCreateUser(t *testing.T) {
+	password, _ := helper.MakeHash("12341234")
 	var user = User{
 		Name:     "Test",
-		Email:    "tt32@tt.com",
-		Password: "12341234",
+		Email:    "tt312@tt.com",
+		Password: password,
 	}
 	user, err := CreateUser(user)
 	if err != nil {
@@ -22,6 +24,13 @@ func TestCreateUser(t *testing.T) {
 	}
 
 	createUserID = user.ID
+
+	// findUser, _ := GetUserByID(createUserID)
+
+	// jsonUser, _ := json.Marshal(user)
+	// jsonFindUser, _ := json.Marshal(findUser)
+
+	// assert.JSONEq(t, string(jsonUser), string(jsonFindUser))
 }
 
 func TestDestroyUserByID(t *testing.T) {
@@ -31,5 +40,5 @@ func TestDestroyUserByID(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	assert.Equal(t, n, int64(1))
+	assert.Equal(t, n, 1)
 }
