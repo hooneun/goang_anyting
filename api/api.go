@@ -27,9 +27,10 @@ func Time(c *gin.Context) {
 	})
 }
 
-func GetUserById(c *gin.Context) {
-	p := c.Param("id")
-	id, err := strconv.Atoi(p)
+// GetUserByID !
+func GetUserByID(c *gin.Context) {
+	pID := c.Param("id")
+	id, err := strconv.Atoi(pID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -37,9 +38,11 @@ func GetUserById(c *gin.Context) {
 		return
 	}
 
-	user, err := model.GetUserByID(id)
+	user, err := h.user.GetUserByID(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
 	c.JSON(http.StatusOK, user)

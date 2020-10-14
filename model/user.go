@@ -2,54 +2,38 @@ package model
 
 import (
 	"log"
-	"time"
+
+	"github.com/hooneun/golang_anyting/helper"
+	"gorm.io/gorm"
 )
 
 // User struct
 type User struct {
-	ID        int64     `json:"id" db:"id"`
-	Name      string    `json:"name" db:"name"`
-	Email     string    `json:"email" db:"email"`
-	Password  string    `json:"password" db:"password"`
-	CreatedAt time.Time `json:"createdAt" db:"created_at"`
-	UpdatedAt time.Time `json:"updatedAt" db:"updated_at"`
+	gorm.Model
+	ID       int64  `json:"id" gorm:"column:id"`
+	Name     string `json:"name" gorm:"column:name"`
+	Email    string `json:"email" gorm:"column:email"`
+	Password string `json:"password" gorm:"column:password"`
+}
+
+// TableName User table name
+func (User) TableName() string {
+	return "users"
 }
 
 // GetUserByID user id get
-func GetUserByID(id int64) (user User, err error) {
-	db, err := Connect()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	err = db.QueryRow("SELECT id, name, email, created_at, updated_at FROM users WHERE id = ?", id).Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &user.UpdatedAt)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return user, nil
+func (db *ORM) GetUserByID(id int) (user User, err error) {
+	return user, db.First(&user, id).Error
 }
 
 // CreateUser add user!
-func CreateUser(user User) (u User, err error) {
-	db, err := Connect()
+func (db *ORM) CreateUser(u User) (user User, err error) {
+	u.Password, err = helper.MakeHash(u.Password)
 	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	result, err := db.Exec("INSERT INTO users (name, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?)", user.Name, user.Email, user.Password, time.Now().Format(time.RFC3339), time.Now().Format(time.RFC3339))
-	if err != nil {
-		log.Fatal(err)
+		return user, err
 	}
 
-	// if result.RowsAffected() < 1 {
-	// 	return user
-	// }
-
-	lastID, _ := result.LastInsertId()
-	return GetUserByID(lastID)
+	return user, db.Create(&user).Error
 }
 
 // DestroyUserByID delete user

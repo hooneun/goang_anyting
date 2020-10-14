@@ -4,7 +4,6 @@ import (
 	"log"
 	"testing"
 
-	"github.com/hooneun/golang_anyting/helper"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,18 +11,18 @@ import (
 var createUserID int64
 
 func TestCreateUser(t *testing.T) {
-	password, _ := helper.MakeHash("12341234")
-	var user = User{
-		Name:     "Test",
-		Email:    "tt312@tt.com",
-		Password: password,
-	}
-	user, err := CreateUser(user)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// password, _ := helper.MakeHash("12341234")
+	// var user = User{
+	// 	Name:     "Test",
+	// 	Email:    "tt312@tt.com",
+	// 	Password: password,
+	// }
+	// user, err := api.Handler(user)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	createUserID = user.ID
+	// createUserID = user.ID
 
 	// findUser, _ := GetUserByID(createUserID)
 

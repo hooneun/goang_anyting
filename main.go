@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tt/api"
+	"github.com/hooneun/golang_anyting/api"
 )
 
 func setupRouter() *gin.Engine {
@@ -15,7 +15,7 @@ func setupRouter() *gin.Engine {
 		})
 	})
 	r.GET("/time", api.Time)
-	r.GET("/user/:id", api.GetUserById)
+	r.GET("/user/:id", api.GetUserByID)
 
 	return r
 }
