@@ -9,6 +9,23 @@ import (
 	"github.com/hooneun/golang_anyting/model"
 )
 
+// HandlerInterface !
+type HandlerInterface interface {
+	GetUserByID(c *gin.Context)
+}
+
+// API !
+func API() (*Handler, error) {
+	db, err := model.NewORM()
+	if err != nil {
+		return nil, err
+	}
+
+	return &Handler{
+		db: db,
+	}, nil
+}
+
 func Time(c *gin.Context) {
 	db, err := model.Connect()
 	if err != nil {
@@ -28,7 +45,7 @@ func Time(c *gin.Context) {
 }
 
 // GetUserByID !
-func GetUserByID(c *gin.Context) {
+func (h *Handler) GetUserByID(c *gin.Context) {
 	pID := c.Param("id")
 	id, err := strconv.Atoi(pID)
 	if err != nil {
@@ -38,7 +55,7 @@ func GetUserByID(c *gin.Context) {
 		return
 	}
 
-	user, err := h.user.GetUserByID(id)
+	user, err := h.db.GetUserByID(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),

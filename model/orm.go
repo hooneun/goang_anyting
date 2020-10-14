@@ -11,8 +11,8 @@ type ORM struct {
 }
 
 // NewORM !
-func NewORM(*ORM, error) (*ORM, error) {
-	dns := "root@tcp(127.0.0.1)/laravel8?charset=utf8&parseTime=true&loc=local"
+func NewORM() (*ORM, error) {
+	dns := "root@tcp(127.0.0.1)/laravel8?charset=utf8&parseTime=true"
 	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{})
 
 	return &ORM{

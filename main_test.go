@@ -1,25 +1,34 @@
 package main
 
-// func TestPingRoute(t *testing.T) {
-// 	router := setupRouter()
-// 	w := httptest.NewRecorder()
-// 	req, _ := http.NewRequest("GET", "/ping", nil)
-// 	router.ServeHTTP(w, req)
+import (
+	"net/http"
+	"net/http/httptest"
+	"strconv"
+	"testing"
 
-// 	assert.Equal(t, http.StatusOK, w.Code)
-// 	assert.JSONEq(t, `{"message":"pong"}`, w.Body.String())
-// }
+	"github.com/hooneun/golang_anyting/api"
+	"github.com/stretchr/testify/assert"
+)
 
-// func TestGetUserByIdRoute(t *testing.T) {
-// 	router := setupRouter()
-// 	w := httptest.NewRecorder()
-// 	id := 1
-// 	req, _ := http.NewRequest("GET", "/user/"+strconv.Itoa(id), nil)
-// 	router.ServeHTTP(w, req)
+func TestPingRoute(t *testing.T) {
+	h, _ := api.API()
+	router := setupRouter(h)
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/ping", nil)
+	router.ServeHTTP(w, req)
 
-// 	user, _ := model.
-// 	jsonUser, _ := json.Marshal(user)
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.JSONEq(t, `{"message":"pong"}`, w.Body.String())
+}
 
-// 	assert.Equal(t, http.StatusOK, w.Code)
-// 	assert.JSONEq(t, string(jsonUser), w.Body.String())
-// }
+func TestGetUserByIdRoute(t *testing.T) {
+	h, _ := api.API()
+	router := setupRouter(h)
+	w := httptest.NewRecorder()
+	id := 1
+	req, _ := http.NewRequest("GET", "/user/"+strconv.Itoa(id), nil)
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	// assert.JSONEq(t, string(jsonUser), w.Body.String())
+}

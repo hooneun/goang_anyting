@@ -23,7 +23,7 @@ func (User) TableName() string {
 
 // GetUserByID user id get
 func (db *ORM) GetUserByID(id int) (user User, err error) {
-	return user, db.First(&user, id).Error
+	return user, db.Unscoped().First(&user, id).Error
 }
 
 // CreateUser add user!
@@ -33,7 +33,7 @@ func (db *ORM) CreateUser(u User) (user User, err error) {
 		return user, err
 	}
 
-	return user, db.Create(&user).Error
+	return user, db.Unscoped().Create(&user).Error
 }
 
 // DestroyUserByID delete user
