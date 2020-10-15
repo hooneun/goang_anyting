@@ -36,6 +36,10 @@ func (db *ORM) CreateUser(u User) (user User, err error) {
 	return user, db.Unscoped().Create(&user).Error
 }
 
+// LoginUser !
+func (db *ORM) LoginUser(email, password string) bool {
+}
+
 // DestroyUserByID delete user
 func DestroyUserByID(id int64) (n int64, err error) {
 	db, err := Connect()
