@@ -38,6 +38,7 @@ func (db *ORM) CreateUser(u User) (user User, err error) {
 
 // LoginUser !
 func (db *ORM) LoginUser(email, password string) bool {
+	return false
 }
 
 // DestroyUserByID delete user
