@@ -10,6 +10,8 @@ func f(from string) {
 	}
 }
 func main() {
+	// goroutine !
+
 	// f("direct")
 
 	// go f("goroutine")
@@ -18,13 +20,23 @@ func main() {
 	// 	fmt.Println(msg)
 	// }("going")
 
-	messages := make(chan string)
-
-	go func() { messages <- "ping" }()
-
-	msg := <-messages
-	fmt.Println(msg)
-
 	// time.Sleep(time.Second)
 	// fmt.Println("done")
+
+	// channel !
+	// messages := make(chan string)
+
+	// go func() { messages <- "ping" }()
+
+	// msg := <-messages
+	// fmt.Println(msg)
+
+	// Channel Buffering
+	messages := make(chan string, 2)
+
+	messages <- "buffered"
+	messages <- "channel"
+
+	fmt.Println(<-messages)
+	fmt.Println(<-messages)
 }
