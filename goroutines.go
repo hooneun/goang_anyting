@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 func f(from string) {
@@ -9,6 +10,24 @@ func f(from string) {
 		fmt.Println(from, ":", i)
 	}
 }
+
+func worker(done chan bool) {
+	fmt.Println("working...")
+	time.Sleep(time.Second)
+	fmt.Println("done")
+
+	done <- true
+}
+
+func ping(pings chan<- string, msg string) {
+	pings <- msg
+}
+
+func pong(pings <-chan string, pongs chan<- string) {
+	msg := <-pings
+	pongs <- msg
+}
+
 func main() {
 	// goroutine !
 
@@ -32,11 +51,31 @@ func main() {
 	// fmt.Println(msg)
 
 	// Channel Buffering
-	messages := make(chan string, 2)
+	// messages := make(chan string, 2)
 
-	messages <- "buffered"
-	messages <- "channel"
+	// messages <- "buffered"
+	// messages <- "channel"
 
-	fmt.Println(<-messages)
-	fmt.Println(<-messages)
+	// fmt.Println(<-messages)
+	// fmt.Println(<-messages)
+
+	// Channel Synchronization
+	// done := make(chan bool, 1)
+	// go worker(done)
+
+	// fmt.Println("------Done!")
+	// <-done
+	// fmt.Println("------End!")
+
+	// Channel Directions
+	// https://gobyexample.com/channel-directions
+
+	// pings := make(chan string, 1)
+	// pongs := make(chan string, 1)
+	// ping(pings, "passed message")
+	// pong(pings, pongs)
+	// fmt.Println(<-pongs)
+
+	// Select!!!
+	// https://gobyexample.com/select
 }
