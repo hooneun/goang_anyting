@@ -11,13 +11,13 @@ func f(from string) {
 	}
 }
 
-func worker(done chan bool) {
-	fmt.Println("working...")
-	time.Sleep(time.Second)
-	fmt.Println("done")
+// func worker(done chan bool) {
+// 	fmt.Println("working...")
+// 	time.Sleep(time.Second)
+// 	fmt.Println("done")
 
-	done <- true
-}
+// 	done <- true
+// }
 
 func ping(pings chan<- string, msg string) {
 	pings <- msg
@@ -26,6 +26,15 @@ func ping(pings chan<- string, msg string) {
 func pong(pings <-chan string, pongs chan<- string) {
 	msg := <-pings
 	pongs <- msg
+}
+
+func worker(id int, jobs <-chan int, results chan<- int) {
+	for j := range jobs {
+		fmt.Println("worker", id, "started  job", j)
+		time.Sleep(time.Second)
+		fmt.Println("worker", id, "finished job", j)
+		results <- j * 2
+	}
 }
 
 func main() {
@@ -203,20 +212,59 @@ func main() {
 	// Timers
 	// https://gobyexample.com/timers
 
-	timer1 := time.NewTimer(2 * time.Second)
+	// timer1 := time.NewTimer(2 * time.Second)
 
-	<-timer1.C
-	fmt.Println("Timer 1 fired")
+	// <-timer1.C
+	// fmt.Println("Timer 1 fired")
 
-	timer2 := time.NewTimer(time.Second)
-	go func() {
-		<-timer2.C
-		fmt.Println("Timer 2 fired")
-	}()
-	stop2 := timer2.Stop()
-	if stop2 {
-		fmt.Println("Timer 2 stopped")
+	// timer2 := time.NewTimer(time.Second)
+	// go func() {
+	// 	<-timer2.C
+	// 	fmt.Println("Timer 2 fired")
+	// }()
+	// stop2 := timer2.Stop()
+	// if stop2 {
+	// 	fmt.Println("Timer 2 stopped")
+	// }
+
+	// time.Sleep(2 * time.Second)
+
+	// Tickers
+	// ticker := time.NewTicker(500 * time.Millisecond)
+	// done := make(chan bool)
+
+	// go func() {
+	// 	for {
+	// 		select {
+	// 		case <-done:
+	// 			return
+	// 		case t := <-ticker.C:
+	// 			fmt.Println("Tick at", t)
+	// 		}
+	// 	}
+	// }()
+
+	// time.Sleep(1600 * time.Millisecond)
+	// ticker.Stop()
+	// done <- true
+	// fmt.Println("Ticker stopped")
+
+	// Worker Pools
+	const numJobs = 5
+	jobs := make(chan int, numJobs)
+	results := make(chan int, numJobs)
+
+	for w := 1; w <= 3; w++ {
+		go worker(w, jobs, results)
 	}
 
-	time.Sleep(2 * time.Second)
+	for j := 1; j <= numJobs; j++ {
+		jobs <- j
+	}
+
+	close(jobs)
+
+	for a := 1; a <= numJobs; a++ {
+		<-results
+	}
 }
